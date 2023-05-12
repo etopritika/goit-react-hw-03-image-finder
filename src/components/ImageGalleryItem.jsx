@@ -1,7 +1,14 @@
-export default function ImageGalleryItem(params) {
+import "../styles/styles.css";
+
+export default function ImageGalleryItem({ pictures, showModal }) {
+
   return (
-    <li className="gallery-item">
-      <img src="" alt="" />
-    </li>
+    pictures.map(({ id, webformatURL, largeImageURL, tags }) => {
+      // console.log(largeImageURL);
+      return (<li key={id} className="ImageGalleryItem">
+      <img onClick={showModal} className="ImageGalleryItem-image" loading="lazy" src={webformatURL} alt={tags}/>
+      </li>)
+    })
   );
 }
+

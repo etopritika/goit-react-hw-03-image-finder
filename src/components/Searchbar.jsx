@@ -1,35 +1,39 @@
 import React, { Component } from 'react';
+import "../styles/styles.css";
+
 
 export default class Searchbar extends Component {
   state = {
-    picture: '',
+    pictureName: '',
   };
 
   handleInputChange = e => {
-    this.setState({ picture: e.currentTarget.value.toLowerCase() });
+    this.setState({ pictureName: e.currentTarget.value.toLowerCase() });
   };
+  
   handleSubmit = e => {
-    const { picture } = this.state;
+    const { pictureName } = this.state;
     e.preventDefault();
-    if (picture.trim() === '') {
-      return;
+    if (pictureName.trim() === '') {
+      return alert("Enter the name of the picture");
     }
-    this.props.onSubmit(picture);
-    this.setState({ picuture: '' });
+    this.props.onSubmit(pictureName);
+    this.setState({ pictureName: '' });
   };
 
   render() {
-    const { picture } = this.state;
+    const { pictureName } = this.state;
     return (
-      <header className="searchbar">
-        <form onSubmit={this.handleSubmit} className="form">
-          <button type="submit" className="button">
-            <span className="button-label">Search</span>
+      <header className="Searchbar">
+        <form onSubmit={this.handleSubmit} className="SearchForm">
+          <button type="submit" className="SearchForm-button">
+            <span className="SearchForm-button-label">Search</span>
           </button>
 
           <input
-            className="input"
-            value={picture}
+            className="SearchForm-input"
+            value={pictureName}
+            name="query"
             onChange={this.handleInputChange}
             type="text"
             autoComplete="off"

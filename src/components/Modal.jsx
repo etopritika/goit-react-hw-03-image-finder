@@ -13,15 +13,20 @@ export default class Modal extends Component {
   }
 
   handleKeyDown = e => {
-    console.log(e.code);
     if (e.code === 'Escape') {
+      this.props.onClose();
+    }
+  };
+
+  handleBackdropClick = e => {
+    if (e.currentTarget === e.target) {
       this.props.onClose();
     }
   };
 
   render() {
     return createPortal(
-      <div className="Overlay">
+      <div className="Overlay" onClick={this.handleBackdropClick}>
         <div className="Modal">{this.props.children}</div>
       </div>,
       modalRoot

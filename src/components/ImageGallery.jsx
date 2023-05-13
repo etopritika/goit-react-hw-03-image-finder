@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import ImageGalleryItem from './ImageGalleryItem';
 import FetchPicture from '../services/picture-api';
 import LoadMoreButton from './Button';
+import Loader from './Loader';
 import '../styles/styles.css';
-import { RotatingLines } from 'react-loader-spinner';
 const api = new FetchPicture();
 
 export default class ImageGallery extends Component {
@@ -19,33 +19,29 @@ export default class ImageGallery extends Component {
     const nextName = this.props.pictureName;
     if (prevName !== nextName) {
       this.setState({ status: 'pending' });
-      setTimeout(() => {
-        api.query = nextName;
-        api
-          .fetchArticles()
-          .then(({ hits }) =>
-            this.setState({ pictures: [...hits], status: 'resolved' })
-          )
-          .catch(error => this.setState({ error, status: 'rejected' }));
-        api.resetPage();
-      }, 500);
+      api.query = nextName;
+      api
+        .fetchArticles()
+        .then(({ hits }) =>
+          this.setState({ pictures: [...hits], status: 'resolved' })
+        )
+        .catch(error => this.setState({ error, status: 'rejected' }));
+      api.resetPage();
     }
   }
 
   onLoadMoreClick = e => {
     this.setState({ load_button: true });
-    setTimeout(() => {
-      api
-        .fetchArticles()
-        .then(({ hits }) =>
-          this.setState(prevState => ({
-            pictures: [...prevState.pictures, ...hits],
-            status: 'resolved',
-            load_button: false,
-          }))
-        )
-        .catch(error => this.setState({ error, status: 'rejected' }));
-    }, 500);
+    api
+      .fetchArticles()
+      .then(({ hits }) =>
+        this.setState(prevState => ({
+          pictures: [...prevState.pictures, ...hits],
+          status: 'resolved',
+          load_button: false,
+        }))
+      )
+      .catch(error => this.setState({ error, status: 'rejected' }));
   };
 
   render() {
@@ -58,13 +54,7 @@ export default class ImageGallery extends Component {
     if (status === 'pending') {
       return (
         <div style={styles}>
-          <RotatingLines
-            strokeColor="#3f51b5"
-            strokeWidth="5"
-            animationDuration="0.75"
-            width="50"
-            visible={true}
-          />
+          <Loader />
         </div>
       );
     }
@@ -75,17 +65,14 @@ export default class ImageGallery extends Component {
       return (
         <>
           <ul className="ImageGallery">
-            <ImageGalleryItem pictures={pictures} showModal={this.props.showModal}/>
+            <ImageGalleryItem
+              pictures={pictures}
+              showModal={this.props.showModal}
+            />
           </ul>
           {this.state.load_button ? (
             <div style={styles}>
-              <RotatingLines
-                strokeColor="#3f51b5"
-                strokeWidth="5"
-                animationDuration="0.75"
-                width="50"
-                visible={true}
-              />
+              <Loader />
             </div>
           ) : (
             <LoadMoreButton onClick={this.onLoadMoreClick} />

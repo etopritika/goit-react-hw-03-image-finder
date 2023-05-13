@@ -28,7 +28,7 @@ export class App extends Component {
       <div className='App'>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery pictureName={pictureName} showModal={this.toggleModal}/>
-        {showModal && <Modal onClose={this.toggleModal}><h1>TEST</h1><img src="" alt="" /></Modal>}
+        {showModal && (<Modal onClose={this.toggleModal}><h1>TEST</h1><img src="" alt="" /></Modal>)}
       </div>
     );
   }
